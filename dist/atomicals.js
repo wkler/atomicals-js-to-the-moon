@@ -1,0 +1,1 @@
+"use strict";exports.__esModule=!0,exports.walletPathResolver=void 0;var dotenv=require("dotenv"),walletPathResolver=(dotenv.config(),function(){var e=".",o=(process.env.WALLET_PATH&&(e=process.env.WALLET_PATH),"wallet.json");return process.env.WALLET_FILE&&(o=process.env.WALLET_FILE),"".concat(e,"/").concat(o)});exports.walletPathResolver=walletPathResolver;
