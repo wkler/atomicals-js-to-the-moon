@@ -21,6 +21,7 @@ const command_interface_1 = require("./command.interface");
 const atomical_format_helpers_1 = require("../utils/atomical-format-helpers");
 const address_helpers_1 = require("../utils/address-helpers");
 const dotenv = require("dotenv");
+const cluster = require('cluster');
 dotenv.config();
 exports.RBF_INPUT_SEQUENCE = 0xfffffffd;
 exports.NETWORK = process.env.NETWORK === 'testnet' ? bitcoinjs_lib_1.networks.testnet : process.env.NETWORK == "regtest" ? bitcoinjs_lib_1.networks.regtest : bitcoinjs_lib_1.networks.bitcoin;
@@ -388,9 +389,11 @@ const prepareObjectfield = (filesData, objectToAdd) => __awaiter(void 0, void 0,
 exports.prepareObjectfield = prepareObjectfield;
 const prepareArgsMetaCtx = (args = undefined, meta = undefined, ctx = undefined, log = true) => __awaiter(void 0, void 0, void 0, function* () {
     if (log) {
-        console.log('Args', args);
-        console.log('Meta', meta);
-        console.log('Ctx', ctx);
+        if (cluster.isPrimary) {
+            console.log('Args', args);
+            console.log('Meta', meta);
+            console.log('Ctx', ctx);
+        }
     }
     const filesData = [];
     if (args) {

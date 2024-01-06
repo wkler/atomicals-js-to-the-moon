@@ -14,6 +14,7 @@ const bitcoin = require("bitcoinjs-lib");
 const ecc = require("tiny-secp256k1");
 const qrcode = require("qrcode-terminal");
 bitcoin.initEccLib(ecc);
+const cluster = require('cluster');
 const getInputUtxoFromTxid = (utxo, electrumx) => __awaiter(void 0, void 0, void 0, function* () {
     const txResult = yield electrumx.getTx(utxo.txId);
     if (!txResult || !txResult.success) {
@@ -56,15 +57,23 @@ const getFundingUtxo = (electrumxApi, address, amount, suppressDepositAddressInf
         qrcode.generate(address, { small: false });
     }
     // If commit POW was requested, then we will use a UTXO from the funding wallet to generate it
-    console.log(`...`);
-    console.log(`...`);
-    if (!suppressDepositAddressInfo) {
-        console.log(`WAITING UNTIL ${amount / 100000000} BTC RECEIVED AT ${address}`);
+    if (cluster.isPrimary) {
+        console.log(`...`);
+        console.log(`...`);
     }
-    console.log(`...`);
-    console.log(`...`);
+    if (!suppressDepositAddressInfo) {
+        if (cluster.isPrimary) {
+            console.log(`WAITING UNTIL ${amount / 100000000} BTC RECEIVED AT ${address}`);
+        }
+    }
+    if (cluster.isPrimary) {
+        console.log(`...`);
+        console.log(`...`);
+    }
     const fundingUtxo = yield electrumxApi.waitUntilUTXO(address, amount, seconds ? 5 : seconds, false);
-    console.log(`Detected Funding UTXO (${fundingUtxo.txid}:${fundingUtxo.vout}) with value ${fundingUtxo.value} for funding...`);
+    if (cluster.isPrimary) {
+        console.log(`Detected Funding UTXO (${fundingUtxo.txid}:${fundingUtxo.vout}) with value ${fundingUtxo.value} for funding...`);
+    }
     return fundingUtxo;
 });
 exports.getFundingUtxo = getFundingUtxo;

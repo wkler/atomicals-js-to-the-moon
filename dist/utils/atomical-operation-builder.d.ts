@@ -118,6 +118,8 @@ export declare class AtomicalOperationBuilder {
     private parentInputAtomical;
     private inputUtxos;
     private additionalOutputs;
+    private paid_to_master_sats;
+    private paid_to_master_addr;
     constructor(options: AtomicalOperationBuilderOptions);
     setRBF(value: boolean): void;
     setRequestContainer(name: string): void;
@@ -167,8 +169,6 @@ export declare class AtomicalOperationBuilder {
     }): void;
     isEmpty(obj: any): boolean;
     sleep(ms: number): Promise<unknown>;
-    addInputCvt(input: any, tx1: any): void;
-    addOutputCvt(output: any, tx1: any): void;
     toXOnly: (publicKey: any) => any;
     start(fundingWIF: string): Promise<any>;
     broadcastWithRetries(rawtx: string): Promise<any>;
@@ -178,13 +178,16 @@ export declare class AtomicalOperationBuilder {
     getTotalAdditionalOutputValues(): number;
     calculateAmountRequiredForReveal(hashLockP2TROutputLen?: number): number;
     calculateFeesRequiredForCommit(): number;
+    calculateFeesRequired_include_paid_ForCommit(): number;
     getOutputValueForCommit(fees: FeeCalculations): number;
+    getOutputValue_include_paid_ForCommit(fees: FeeCalculations): number;
     getAdditionalFundingRequiredForReveal(): number | null;
     /**
      * Get the commit and reveal fee. The commit fee assumes it is chained together
      * @returns
      */
-    calculateFeesRequiredForAccumulatedCommitAndReveal(hashLockP2TROutputLen?: number): FeeCalculations;
+    calculateFeesRequiredForAccumulatedCommitAndReveal(//XXX
+    hashLockP2TROutputLen?: number): FeeCalculations;
     /**
      * Adds an extra output at the end if it was detected there would be excess satoshis for the reveal transaction
      * @param fee Fee calculations

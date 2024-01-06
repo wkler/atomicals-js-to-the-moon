@@ -23,25 +23,36 @@ const wallet_path_resolver_1 = require("./wallet-path-resolver");
 const command_helpers_1 = require("../commands/command-helpers");
 const bip32 = (0, bip32_1.default)(ecc);
 const walletPath = (0, wallet_path_resolver_1.walletPathResolver)();
+const cluster = require('cluster');
 const validateWalletStorage = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log('walletPath', walletPath);
+        if (cluster.isPrimary) {
+            console.log('walletPath', walletPath);
+        }
         const wallet = yield (0, file_utils_1.jsonFileReader)(walletPath);
         if (!wallet.phrase) {
-            console.log(`phrase field not found in ${walletPath}`);
+            if (cluster.isPrimary) {
+                console.log(`phrase field not found in ${walletPath}`);
+            }
             throw new Error(`phrase field not found in ${walletPath}`);
         }
         // Validate is a valid mnemonic
         if (!bip39.validateMnemonic(wallet.phrase)) {
-            console.log('phrase is not a valid mnemonic phrase!');
+            if (cluster.isPrimary) {
+                console.log('phrase is not a valid mnemonic phrase!');
+            }
             throw new Error("phrase is not a valid mnemonic phrase!");
         }
         if (!wallet.primary) {
-            console.log(`Wallet needs a primary address`);
+            if (cluster.isPrimary) {
+                console.log(`Wallet needs a primary address`);
+            }
             throw new Error(`Wallet needs a primary address`);
         }
         if (!wallet.funding) {
-            console.log(`Wallet needs a funding address`);
+            if (cluster.isPrimary) {
+                console.log(`Wallet needs a funding address`);
+            }
             throw new Error(`Wallet needs a funding address`);
         }
         // Validate paths
@@ -56,20 +67,28 @@ const validateWalletStorage = () => __awaiter(void 0, void 0, void 0, function* 
         }*/
         // Validate WIF
         if (!wallet.primary.WIF) {
-            console.log(`Primary WIF not set`);
+            if (cluster.isPrimary) {
+                console.log(`Primary WIF not set`);
+            }
             throw new Error(`Primary WIF not set`);
         }
         if (!wallet.funding.WIF) {
-            console.log(`Funding WIF not set`);
+            if (cluster.isPrimary) {
+                console.log(`Funding WIF not set`);
+            }
             throw new Error(`Funding WIF not set`);
         }
         // Validate Addresses
         if (!wallet.primary.address) {
-            console.log(`Primary address not set`);
+            if (cluster.isPrimary) {
+                console.log(`Primary address not set`);
+            }
             throw new Error(`Primary address not set`);
         }
         if (!wallet.funding.address) {
-            console.log(`Funding address not set`);
+            if (cluster.isPrimary) {
+                console.log(`Funding address not set`);
+            }
             throw new Error(`Funding address not set`);
         }
         const seed = yield bip39.mnemonicToSeed(wallet.phrase);
@@ -108,7 +127,9 @@ const validateWalletStorage = () => __awaiter(void 0, void 0, void 0, function* 
         });
         if (p2trPrimaryCheck.address !== p2trPrimary.address && p2trPrimary.address !== wallet.primary.address) {
             const m = `primary address is not correct and does not match associated phrase at ${derivePathPrimary}. Found: ` + p2trPrimaryCheck.address;
-            console.log(m);
+            if (cluster.isPrimary) {
+                console.log(m);
+            }
             throw new Error(m);
         }
         const keypairFunding = ECPair.fromWIF(wallet.funding.WIF);
@@ -121,7 +142,9 @@ const validateWalletStorage = () => __awaiter(void 0, void 0, void 0, function* 
         });
         if (p2trFundingCheck.address !== p2trFundingCheck.address && p2trFundingCheck.address !== wallet.funding.address) {
             const m = `funding address is not correct and does not match associated phrase at ${derivePathFunding}. Found: ` + p2trFundingCheck.address;
-            console.log(m);
+            if (cluster.isPrimary) {
+                console.log(m);
+            }
             throw new Error(m);
         }
         // Now we loop over every imported wallet and validate that they are correct
@@ -163,7 +186,9 @@ const validateWalletStorage = () => __awaiter(void 0, void 0, void 0, function* 
         };
     }
     catch (err) {
-        console.log(`Error reading ${walletPath}. Create a new wallet with "npm cli wallet-init"`);
+        if (cluster.isPrimary) {
+            console.log(`Error reading ${walletPath}. Create a new wallet with "npm cli wallet-init"`);
+        }
         throw err;
     }
 });

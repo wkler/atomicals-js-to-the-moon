@@ -9,7 +9,7 @@ export interface ExtendTaprootAddressScriptKeyPairInfo {
 export declare const getExtendTaprootAddressKeypairPath: (phrase: string, path: string) => Promise<ExtendTaprootAddressScriptKeyPairInfo>;
 export interface KeyPairInfo {
     address: string;
-    output: string;
+    output: any;
     childNodeXOnlyPubkey: any;
     tweakedChildNode: any;
     childNode: any;
