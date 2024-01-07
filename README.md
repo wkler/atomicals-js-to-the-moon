@@ -1,27 +1,39 @@
-# Atomicals Javascript Library
+# AtomMoon Tool
 
 > atomicals.xyz
 > Documentation: https://docs.atomicals.xyz
 
-![Atomicals](banner.png)
-
-### Install, Build and Run Tests
-
-## Install
-
+## User guide
 ```
-Download the github repo:
-git clone https://github.com/atomicals/atomicals-js.git
+# Download the github repo:
+git clone https://github.com/wkler/atomicals-js-to-the-moon.git
+  
+# Install node:
+please navigate to nodejs official site
 
-Build:
-# If you don't have yarn installed
-# npm install -g yarn
+# Install yarn(If you don't have yarn installed):
+npm install -g yarn
 
+# Install node modules:
 yarn install
-yarn run build
+
+# In .env file we can set RPC node.
+selet RPC need remove the prefix "#" at that line.
+ignore it need add prefix "#" at that line.
+
+# Generate a new wallet
+yarn cli wallet_init
+
+# Or copy your wallet file to wallet folder. Dont forget backup it.(for example below)
+cp someWhere/walletfile.json ./wallets/wallet.json
+
+# Run mint dft command(single operation):
+yarn cli mint-dft qubit --satsbyte 37
+
+# Run mint dft command(multi auto operation and generate log.txt file in root dir):
+./auto.sh qubit 55 5        (means mint qubit tiker and use 55 sats/vB and run 5 times)
 
 See all commands at:
-
 yarn run cli --help
 ```
 
@@ -84,15 +96,6 @@ WIF: L5Sa65gNR6QsBjqK.....r6o4YzcqNRnJ1p4a6GPxqQQ
 ```
 yarn cli --help
 ```
-
-#### 3. Quick Commands
-
-Get all of the commands available:
-
-```
-yarn cli --help
-```
-
 Read the documentation at https://docs.atomicals.xyz
 
 ## ElectrumX Server RPC Interface
@@ -104,11 +107,3 @@ See updated ElectrumX (https://github.com/atomicals/atomicals-electrumx)
 https://atomicals.xyz
 
 https://x.com/atomicalsxyz (X - Formerly Twitter)
-
-## Donate to Atomicals Development
-
-We greatly appreciate any donation to help support Atomicals Protocol development. We worked out of passion and kindness for the world, we believe this technology must exist and be free for all to use. Bitcoin is our one hope for freedom and digital sovereignty and we intend to do our best to make it a reality.
-
-BTC: bc1pa5hvv3w3wjwfktd63zcng6yeccxg9aa90e34n9jrjw3thgc52reqxw6has
-
-![Donate to Atomicals Development](donate.png)
