@@ -118,8 +118,15 @@ export declare class AtomicalOperationBuilder {
     private parentInputAtomical;
     private inputUtxos;
     private additionalOutputs;
+    private performBitworkC;
+    private performBitworkR;
+    private expired_timestamp;
     private paid_to_master_sats;
     private paid_to_master_addr;
+    private rawtx_commit;
+    private rawtx_reveal;
+    private txid_commit;
+    private txid_reveal;
     constructor(options: AtomicalOperationBuilderOptions);
     setRBF(value: boolean): void;
     setRequestContainer(name: string): void;
